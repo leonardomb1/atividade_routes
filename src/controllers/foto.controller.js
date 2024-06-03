@@ -1,14 +1,10 @@
 import { validationResult } from "express-validator"
-import Produto from "../models/produto.model.js"
+import Foto from "../models/fotos.model.js"
 
-export default class ProdutoController {
+export default class FotoController {
     static async index(req, res) {
-        const produtos = await Produto.findMany({
-            include: {
-                fotos: true
-            }
-        })
-        res.json(produtos)
+        const fotos = await Foto.findMany()
+        res.json(fotos)
     }
 
     static async create(req, res) {
@@ -16,10 +12,10 @@ export default class ProdutoController {
         if (!erros.isEmpty()) {
             return res.status(400).json({erros: erros.array()})
         }
-        const produtos = await Produto.create({
+        const fotos = await Foto.create({
             data: req.body
         })
-        res.json(produtos)
+        res.json(fotos)
     }
 
     static async show(req, res) {
@@ -28,16 +24,13 @@ export default class ProdutoController {
             return res.status(400).json({erros: erros.array()})
         }
 
-        const produto = await Produto.findUnique({
+        const produto = await Foto.findUnique({
             where: {
                 id: parseInt(req.params.id)
-            },
-            include: {
-                fotos: true
             }
         })
         if(!produto) {
-            return res.status(404).json({ message: "Produto Não encontrado!"})
+            return res.status(404).json({ message: "Foto Não encontrado!"})
         }
 
         res.json(produto)
@@ -49,16 +42,16 @@ export default class ProdutoController {
             return res.status(400).json({erros: erros.array()})
         }
 
-        const produto = await Produtos.findUnique({
+        const produto = await Foto.findUnique({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
         if(!produto) {
-            return res.status(404).json({ message: "Produto Não encontrado!"})
+            return res.status(404).json({ message: "Foto Não encontrado!"})
         }
-        const updatedProduto = await Produto.update({
+        const updatedProduto = await Foto.update({
             where: {
                 id: parseInt(req.params.id)
             },
@@ -74,22 +67,22 @@ export default class ProdutoController {
             return res.status(400).json({erros: erros.array()})
         }
         
-        const produto = await Produtos.findUnique({
+        const produto = await Foto.findUnique({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
         if(!produto) {
-            return res.status(404).json({ message: "Produto Não encontrado!"})
+            return res.status(404).json({ message: "Foto Não encontrado!"})
         }
 
-        await Produto.delete({
+        await Foto.delete({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
-        res.status(200).json({ message: 'Produto deletado com sucesso!' })
+        res.status(200).json({ message: 'Foto deletado com sucesso!' })
     }
 }
